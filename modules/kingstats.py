@@ -97,6 +97,13 @@ def c_finite_d(list_a, list_b):
 
 
 def moving_average(data_list, n=3):
+    """
+    Performs a moving average over n points
+
+    :param data_list: data in list type
+    :param n: amount of points to average over
+    :return: list of averaged points
+    """
     averaged_data = list()
 
     for i in range(len(data_list) - n):
