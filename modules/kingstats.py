@@ -96,22 +96,22 @@ def c_finite_d(list_a, list_b):
     return da_db
 
 
-def panda_c_finite_d(df_a, df_b):
-    """
-    Performs a central finite difference given two lists((change in A) / (change in B))
-
-    :param df_a: 1D pd DataFrame A
-    :param df_b: 1D pd DataFrame B
-    :return: dA/dB 1D pd DataFrame
-    """
-
-    da_db = pd.DataFrame()
-
-    for k in range(1, len(df_a) - 1):
-        da_db_k = (df_a[k + 1] - df_a[k - 1]) / (df_b[k + 1] - df_b[k - 1])
-        da_db.append(da_db_k)
-
-    return da_db
+# def panda_c_finite_d(df_a, df_b):
+#     """
+#     Performs a central finite difference given two lists((change in A) / (change in B))
+#
+#     :param df_a: 1D pd DataFrame A
+#     :param df_b: 1D pd DataFrame B
+#     :return: dA/dB 1D pd DataFrame
+#     """
+#
+#     da_db = pd.DataFrame()
+#
+#     for k in range(1, len(df_a) - 1):
+#         da_db_k = (df_a[k + 1] - df_a[k - 1]) / (df_b[k + 1] - df_b[k - 1])
+#         da_db.append(da_db_k)
+#
+#     return da_db
 
 
 def moving_average(data_list, n=3):
