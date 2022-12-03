@@ -1,7 +1,9 @@
+# Imports
 import numpy as np
 import pandas as pd
 
 
+# Functions
 def interpolate(data_list):
     """
     Linearly Interpolates by finding the value in between every point
@@ -41,6 +43,14 @@ def extrapolate(slope, intercept, start_x, end_x):
 
 
 def f_finite_d(list_a, list_b):
+    """
+    Performs a forward finite difference given two sets of data. Change in A over change in B.
+
+    :param list_a: List of A values
+    :param list_b: list of B values
+    :return: List of rates E.G. dA/dB
+    """
+
     delta_a = list()
 
     for i in range(len(list_a) - 1):
@@ -51,6 +61,14 @@ def f_finite_d(list_a, list_b):
 
 
 def b_finite_d(list_a, list_b):
+    """
+    Performs a backward finite difference given two sets of data. Change in A over change in B.
+
+    :param list_a: List of A values
+    :param list_b: list of B values
+    :return: List of rates E.G. dA/dB
+    """
+
     delta_a = list()
 
     for k in range(len(list_a) - 1):
@@ -104,6 +122,7 @@ def moving_average(data_list, n=3):
     :param n: amount of points to average over
     :return: list of averaged points
     """
+
     averaged_data = list()
 
     for i in range(len(data_list) - n):
@@ -119,12 +138,31 @@ def moving_average(data_list, n=3):
 
 
 def distance(x1, x2, y1, y2):
+    """
+    Gives the distance between two points given their x and y coordinates
+
+    :param x1: x value of 1st point
+    :param x2: x value of 2nd point
+    :param y1: y value of 1st point
+    :param y2: y value of 2nd point
+    :return: distance value magnitude
+    """
+
     dist = np.sqrt(np.power(x2 - x1, 2) + np.power(y2 - y1, 2))
 
     return dist
 
 
 def magnitude(x_list):
+    """
+    Calculates the magnitude or pythagorean theorem of a list of values
+
+    (a^2, b^2, c^2, ...)^(1/2)
+
+    :param x_list:
+    :return:
+    """
+
     square_xs = 0
 
     for x in x_list:
