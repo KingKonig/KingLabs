@@ -24,14 +24,10 @@ data = kingfiles.na_dropper(data)
 # Filter
 rows_to_delete = list()
 for i in range(len(data)):
-    if (
-            (data.iloc[i, 1] < start_timestamp)
-    ):
+    if data.iloc[i, 1] < start_timestamp:
         rows_to_delete.append(i)
 
-    if (
-            (data.iloc[i, 1] > end_timestamp)
-    ):
+    if data.iloc[i, 1] > end_timestamp:
         rows_to_delete.append(i)
 
 data = data.drop(data.index[rows_to_delete], index=None)

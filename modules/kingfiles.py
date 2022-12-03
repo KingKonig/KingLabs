@@ -1,9 +1,11 @@
+# Imports
 from tkinter import filedialog
 import pandas as pd
 import glob
 import os
 
 
+# Functions
 def read_folder():
     """
     Reads all of the CSVs in a folder
