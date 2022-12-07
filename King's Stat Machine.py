@@ -8,31 +8,15 @@ import numpy as np
 # Main
 # Prepare Data ---------------------------------------------------------------------------------------------------------
 columns = [
-    "frame_no",
-    "timestamp",
-    "position_px_x-green",
-    "position_px_y-green"
+    "Time(seconds)",
+    "Load Cell (lbf)",
+    "Run Tank Pressure (psig)",
+    "Combustion Chamber Pressure (psig)",
+    "Supply Tank Pressure (psig)"
 ]
-
-start_timestamp = 6000  # ms
-end_timestamp = 12000  # ms
-mass = 0.3  # kg
-
 data = kingfiles.file_processor(columns, "files", True)
 data = kingfiles.na_dropper(data)
 
-# Filter
-rows_to_delete = list()
-for i in range(len(data)):
-    if data.iloc[i, 1] < start_timestamp:
-        rows_to_delete.append(i)
-
-    if data.iloc[i, 1] > end_timestamp:
-        rows_to_delete.append(i)
-
-data = data.drop(data.index[rows_to_delete], index=None)
-
-# data.to_csv("Filtered Data.csv", index=False)
 
 print(
     f"--------------------------------Howdy, thanks for using the King's Stat Machine--------------------------------\n"
