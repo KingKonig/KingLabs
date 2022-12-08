@@ -1,17 +1,19 @@
 # Imports
 
 # Functions
-def data_filter(data, start, end):
+def data_cropper(data, start, end, export=False):
     rows_to_delete = list()
+
     for i in range(len(data)):
-        if data.iloc[i, 1] < start:
+        if data.iloc[i, 0] < start:
             rows_to_delete.append(i)
 
-        if data.iloc[i, 1] > end:
+        if data.iloc[i, 0] > end:
             rows_to_delete.append(i)
 
     data = data.drop(data.index[rows_to_delete], index=None)
 
-    # data.to_csv("Filtered Data.csv", index=False)
+    if export:
+        data.to_csv("Cropped Data.csv", index=False)
 
     return data

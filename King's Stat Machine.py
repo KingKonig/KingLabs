@@ -1,5 +1,5 @@
 # Imports
-from modules import kingfiles, kingstats
+from modules import kingfiles, kingstats, kingfunky
 import pandas as pd
 import matplotlib.pyplot as plt
 import statistics as stat
@@ -14,8 +14,13 @@ columns = [
     "Combustion Chamber Pressure (psig)",
     "Supply Tank Pressure (psig)"
 ]
-data = kingfiles.file_processor(columns, "files", True)
+
+start = 138
+end = 142
+
+data = kingfiles.file_processor(columns, "file", False)
 data = kingfiles.na_dropper(data)
+data = kingfunky.data_cropper(data, start, end)
 
 
 print(
@@ -27,29 +32,52 @@ print(
 
 
 # Plots ----------------------------------------------------------------------------------------------------------------
-# Example Plot
-# plt.style.use("dark_background")
-# fig, axs = plt.subplots(1, 1)
-#
-# Time vs X-Position
-# axs[0, 0].scatter(
-#     data["timestamp"] / 1000,
-#     data["position_px_x-green"],
-#     s=10,
-#     c="green"
-# )
-#
-# axs[0, 0].set_title("Time vs X-Position")
-# axs[0, 0].set_xlabel("Time (s)")
-# axs[0, 0].set_ylabel("X-Position (pixels)")
+plt.style.use("dark_background")
+fig, axs = plt.subplots(2, 2)
 
-# Time vs Y-Position
-# axs.plot(
-#     data["timestamp"] / 1000,
-#     data["position_px_y-green"],
-#     # s=10,
-#     c="blue"
-# )
+# Time vs Load Cell
+axs[0, 0].plot(
+    data["Time(seconds)"],
+    data["Load Cell (lbf)"],
+    c="green"
+)
 
-# plt.show()
+axs[0, 0].set_title("Load Cell")
+axs[0, 0].set_xlabel("Time (s)")
+axs[0, 0].set_ylabel("(lbf)")
+
+# Time vs Run Tank Pressure
+axs[0, 1].plot(
+    data["Time(seconds)"],
+    data["Run Tank Pressure (psig)"],
+    c="green"
+)
+
+axs[0, 1].set_title("Run Tank Pressure")
+axs[0, 1].set_xlabel("Time (s)")
+axs[0, 1].set_ylabel("RT Pressure (psig)")
+
+# Time vs Supply Tank Pressure
+axs[1, 1].plot(
+    data["Time(seconds)"],
+    data["Supply Tank Pressure (psig)"],
+    c="green"
+)
+
+axs[1, 1].set_title("Supply Tank Pressure")
+axs[1, 1].set_xlabel("Time (s)")
+axs[1, 1].set_ylabel("ST Pressure (psig)")
+
+# Time vs Chamber Pressure
+axs[1, 0].plot(
+    data["Time(seconds)"],
+    data["Combustion Chamber Pressure (psig)"],
+    c="green"
+)
+
+axs[1, 0].set_title("Chamber Pressure")
+axs[1, 0].set_xlabel("Time (s)")
+axs[1, 0].set_ylabel("Chamber Pressure (psig)")
+
+plt.show()
 # plt.savefig("fig.png")
