@@ -80,7 +80,7 @@ axs[1, 0].set_title("Chamber Pressure")
 axs[1, 0].set_xlabel("Time (s)")
 axs[1, 0].set_ylabel("Chamber Pressure (psig)")
 
-#plt.show()
+# plt.show()
 # plt.savefig("fig.png")
 
 # Web GUI
