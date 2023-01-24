@@ -33,9 +33,9 @@ print(
 
 
 # Plots ----------------------------------------------------------------------------------------------------------------
+fig, axs = plt.subplots(2, 2)
 plt.style.use("dark_background")
 plt.tight_layout()
-fig, axs = plt.subplots(2, 2)
 
 # Time vs Load Cell
 axs[0, 0].plot(
