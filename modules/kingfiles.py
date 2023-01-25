@@ -3,18 +3,20 @@ from tkinter import filedialog
 import pandas as pd
 import glob
 import os
+import streamlit as st
+import time
 
 
 # Functions
 def read_folder():
     """
-    Reads all of the CSVs in a folder
+    Reads all the CSVs in a folder
 
     :return: Pandas dataframe
     """
     # Ask for file path
     folder_path = filedialog.askdirectory()
-    print(f"Reading file path: {folder_path}")
+    print(f"Reading folder: {folder_path}")
 
     # Making dataframe
     data_df = pd.DataFrame()
@@ -42,15 +44,11 @@ def read_file():
     """
 
     # Ask for file
-    file_path = filedialog.askopenfilename()
-    print(f"Selected File Path: {file_path}")
+    uploaded_file = st.file_uploader("Upload a CSV")
+    print(f"Selected File: {uploaded_file}")
 
     # Read the file to dataframe
-    with open(file_path, "rb") as file:
-        try:
-            file_df = pd.read_csv(file, delimiter=",")
-        except:
-            print("Something went wrong reading the file. Is it a CSV?")
+    file_df = pd.read_csv(uploaded_file, delimiter=",")
 
     # Sets index to be [0,n]
     file_df = file_df.reset_index()

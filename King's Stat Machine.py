@@ -24,18 +24,19 @@ data = kingfiles.na_dropper(data)
 data = kingfunky.data_cropper(data, start, end)
 
 
-print(
-    f"--------------------------------Howdy, thanks for using the King's Stat Machine--------------------------------\n"
-    f"---------------------------------------------------Have Fun!---------------------------------------------------\n"
-)
+# print(
+#     f"--------------------------------Howdy, thanks for using the King's Stat Machine--------------------------------\n"
+#     f"---------------------------------------------------Have Fun!---------------------------------------------------\n"
+# )
 
 # Calcs ----------------------------------------------------------------------------------------------------------------
 
 
 # Plots ----------------------------------------------------------------------------------------------------------------
-fig, axs = plt.subplots(2, 2)
 plt.style.use("dark_background")
-plt.tight_layout()
+fig, axs = plt.subplots(2, 2)
+# plt.tight_layout()
+plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
 # Time vs Load Cell
 axs[0, 0].plot(
