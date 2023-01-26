@@ -20,12 +20,7 @@ columns = [
     "Load Cell (lbf)",
     "Run Tank Pressure (psig)",
     "Combustion Chamber Pressure (psig)",
-    "Supply Tank Pressure (psig)"
 ]
-
-start = 138
-end = 142
-
 
 # Calcs ----------------------------------------------------------------------------------------------------------------
 
@@ -34,67 +29,31 @@ end = 142
 def plot():
     plt.style.use("dark_background")
     fig, axs = plt.subplots(2, 2)
-    # plt.tight_layout()
     plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
-    # Time vs Load Cell
-    axs[0, 0].plot(
-        data["Time(seconds)"],
-        data["Load Cell (lbf)"],
-        c="green"
-    )
-
-    axs[0, 0].set_title("Load Cell")
-    axs[0, 0].set_xlabel("Time (s)")
-    axs[0, 0].set_ylabel("(lbf)")
-
-    # Time vs Run Tank Pressure
-    axs[0, 1].plot(
-        data["Time(seconds)"],
-        data["Run Tank Pressure (psig)"],
-        c="green"
-    )
-
-    axs[0, 1].set_title("Run Tank Pressure")
-    axs[0, 1].set_xlabel("Time (s)")
-    axs[0, 1].set_ylabel("RT Pressure (psig)")
-
-    # Time vs Supply Tank Pressure
-    axs[1, 1].plot(
-        data["Time(seconds)"],
-        data["Supply Tank Pressure (psig)"],
-        c="green"
-    )
-
-    axs[1, 1].set_title("Supply Tank Pressure")
-    axs[1, 1].set_xlabel("Time (s)")
-    axs[1, 1].set_ylabel("ST Pressure (psig)")
-
-    # Time vs Chamber Pressure
-    axs[1, 0].plot(
-        data["Time(seconds)"],
-        data["Combustion Chamber Pressure (psig)"],
-        c="green"
-    )
-
-    axs[1, 0].set_title("Chamber Pressure")
-    axs[1, 0].set_xlabel("Time (s)")
-    axs[1, 0].set_ylabel("Chamber Pressure (psig)")
-
-    # plt.show()
-    # plt.savefig("fig.png")
+    # Example:
+    # # Time vs Load Cell
+    # axs[0, 0].plot(
+    #     data["Time(seconds)"],
+    #     data["Load Cell (lbf)"],
+    #     c="green"
+    # )
 
     # Web GUI
-
     st.title("SET Data")
-
     st.pyplot(fig)
 
 
 if __name__ == "__main__":
     if uploaded_file is not None and st.button("Display Graphs"):
+        # Vars for crop
+        start = 0
+        end = 100
+
+        # Data processing
         data = kingfiles.file_processor(columns, "file", False, uploaded_file)
         data = kingfiles.na_dropper(data)
         data = kingfunky.data_cropper(data, start, end)
 
+        # Plot the data
         plot()
