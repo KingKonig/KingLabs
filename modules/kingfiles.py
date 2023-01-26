@@ -36,19 +36,15 @@ def read_folder():
     return files_df
 
 
-def read_file():
+def read_file(file):
     """
     Reads a CSV file
 
     :return: Pandas dataframe
     """
 
-    # Ask for file
-    uploaded_file = st.file_uploader("Upload a CSV")
-    print(f"Selected File: {uploaded_file}")
-
     # Read the file to dataframe
-    file_df = pd.read_csv(uploaded_file, delimiter=",")
+    file_df = pd.read_csv(file, delimiter=",")
 
     # Sets index to be [0,n]
     file_df = file_df.reset_index()
@@ -56,12 +52,13 @@ def read_file():
     return file_df
 
 
-def file_processor(columns=None, target="file", export=False):
+def file_processor(columns=None, target="file", export=False, uploaded=None):
     """
     Reads a CSV file selected by the user with the file browser.
 
     Column list example: ["frame_no", "timestamp", "rx-green", "ry-green"]
 
+    :param uploaded: file from Streamlit
     :param export: Exports a csv if True
     :param columns: a list of columns desired
     :param target: specify if you want a single file or a folder read: "file" or "folder"
@@ -70,7 +67,7 @@ def file_processor(columns=None, target="file", export=False):
 
     # Read file or file path
     if target == "file":
-        data_df = read_file()
+        data_df = read_file(uploaded)
 
     elif target == "folder":
         data_df = read_folder()
