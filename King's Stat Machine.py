@@ -1,71 +1,59 @@
 # Imports
-from modules import kingfiles, kingstats
+from modules import kingfiles, kingstats, kingfunky
 import pandas as pd
 import matplotlib.pyplot as plt
 import statistics as stat
 import numpy as np
+import streamlit as st
 
 # Main
 # Prepare Data ---------------------------------------------------------------------------------------------------------
+
+# File upload widget
+uploaded_file = st.file_uploader("Upload a CSV", type="csv")
+if uploaded_file is not None:
+    print(f"Selected File: {uploaded_file}")
+
+# Select columns
 columns = [
-    "frame_no",
-    "timestamp",
-    "position_px_x-green",
-    "position_px_y-green"
+    "Time(seconds)",
+    "Load Cell (lbf)",
+    "Run Tank Pressure (psig)",
+    "Combustion Chamber Pressure (psig)",
 ]
-
-start_timestamp = 6000  # ms
-end_timestamp = 12000  # ms
-mass = 0.3  # kg
-
-data = kingfiles.file_processor(columns, "files", True)
-data = kingfiles.na_dropper(data)
-
-# Filter
-rows_to_delete = list()
-for i in range(len(data)):
-    if data.iloc[i, 1] < start_timestamp:
-        rows_to_delete.append(i)
-
-    if data.iloc[i, 1] > end_timestamp:
-        rows_to_delete.append(i)
-
-data = data.drop(data.index[rows_to_delete], index=None)
-
-# data.to_csv("Filtered Data.csv", index=False)
-
-print(
-    f"--------------------------------Howdy, thanks for using the King's Stat Machine--------------------------------\n"
-    f"---------------------------------------------------Have Fun!---------------------------------------------------\n"
-)
 
 # Calcs ----------------------------------------------------------------------------------------------------------------
 
 
 # Plots ----------------------------------------------------------------------------------------------------------------
-# Example Plot
-# plt.style.use("dark_background")
-# fig, axs = plt.subplots(1, 1)
-#
-# Time vs X-Position
-# axs[0, 0].scatter(
-#     data["timestamp"] / 1000,
-#     data["position_px_x-green"],
-#     s=10,
-#     c="green"
-# )
-#
-# axs[0, 0].set_title("Time vs X-Position")
-# axs[0, 0].set_xlabel("Time (s)")
-# axs[0, 0].set_ylabel("X-Position (pixels)")
+def plot():
+    plt.style.use("dark_background")
+    fig, axs = plt.subplots(2, 2)
+    plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
-# Time vs Y-Position
-# axs.plot(
-#     data["timestamp"] / 1000,
-#     data["position_px_y-green"],
-#     # s=10,
-#     c="blue"
-# )
+    # Example:
+    # # Time vs Load Cell
+    # axs[0, 0].plot(
+    #     data["Time(seconds)"],
+    #     data["Load Cell (lbf)"],
+    #     c="green"
+    # )
 
-# plt.show()
-# plt.savefig("fig.png")
+    # Web GUI
+    st.title("SET Data")
+    st.pyplot(fig)
+
+
+if __name__ == "__main__":
+    if uploaded_file is not None and st.button("Display Graphs"):
+        # Vars for crop
+        start = 0
+        end = 100
+
+        # Data processing
+        data = kingfiles.file_processor(columns, "file", False, uploaded_file)
+        data = kingfiles.na_dropper(data)
+        data = kingfunky.data_cropper(data, start, end)
+
+        # Plot the data
+        plot()
