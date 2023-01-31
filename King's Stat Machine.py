@@ -51,7 +51,7 @@ if __name__ == "__main__":
         end = 100
 
         # Data processing
-        data = kingfiles.file_processor(uploaded_file_list)
+        data = kingfiles.file_processor(uploaded_file_list, export=True)
         data = kingfunky.na_dropper(data, export=True)
 
         # Plot the data

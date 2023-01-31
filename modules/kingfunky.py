@@ -14,7 +14,7 @@ def data_cropper(df, start, end, export=False):
     df = df.drop(df.index[rows_to_delete], index=None)
 
     if export:
-        df.to_csv("Cropped Data.csv", index=False)
+        df.to_csv("data-data_cropper.csv", index=False)
 
     return df
 
@@ -32,9 +32,10 @@ def na_dropper(df, threshold=None, export=False):
     if threshold is not None:
         df.dropna(axis=1, thresh=threshold, inplace=True)
 
+    df.dropna(axis=1, how="all", inplace=True)
     df.dropna(axis=0, how="any", inplace=True)
 
     if export:
-        df.to_csv("Data.csv", index=False)
+        df.to_csv("data-na_dropper.csv", index=False)
 
     return df
