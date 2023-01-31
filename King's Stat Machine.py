@@ -11,8 +11,8 @@ import streamlit as st
 
 # File upload widget
 uploaded_file_list = st.file_uploader("Upload a CSV", type="csv", accept_multiple_files=True)
-if uploaded_file_list is not None:
-    print(f"Selected File(s): {uploaded_file_list}")
+# if uploaded_file_list is not None:
+#     print(f"Selected File(s): {uploaded_file_list}")
 
 # Select columns
 # columns = [
@@ -57,18 +57,45 @@ def auto_plot(df):
             continue
         n_graphs += 1
 
-
     # Setup plot figure
-
+    n_columns = 3
+    if n_graphs % n_columns == 0:
+        n_rows = n_graphs // n_columns
+    else:
+        n_rows = (n_graphs // n_columns) + 1
 
     plt.style.use("dark_background")
-    fig, axs = plt.subplots(2, 2)
-    plt.subplots_adjust(wspace=0.5, hspace=0.5)
+    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 5, n_rows * 5))
+    # plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
     # Grab values for x axis
-    x_axis = df.loc[:, "timestamp"]
+    x_axis = df["timestamp"]
 
+    # Plot
+    current_row = 0
+    current_column = 0
 
+    for header in headers:
+        if header in skip_list:
+            continue
+
+        if current_column > n_columns - 1:
+            current_row += 1
+            current_column = 0
+
+        axs[current_row, current_column].plot(
+            x_axis,
+            df[header],
+        )
+
+        axs[current_row, current_column].set_title(header)
+
+        print(f"Plot {header} completed.")
+
+        current_column += 1
+
+    # Send to streamlit
+    st.pyplot(fig)
 
 
 if __name__ == "__main__":
