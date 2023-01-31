@@ -4,8 +4,6 @@ import pandas as pd
 import glob
 import os
 import streamlit as st
-import time
-
 
 # Functions
 def read_folder():
