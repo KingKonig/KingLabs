@@ -3,18 +3,18 @@ from tkinter import filedialog
 import pandas as pd
 import glob
 import os
-
+import streamlit as st
 
 # Functions
 def read_folder():
     """
-    Reads all of the CSVs in a folder
+    Reads all the CSVs in a folder
 
     :return: Pandas dataframe
     """
     # Ask for file path
     folder_path = filedialog.askdirectory()
-    print(f"Reading file path: {folder_path}")
+    print(f"Reading folder: {folder_path}")
 
     # Making dataframe
     data_df = pd.DataFrame()
@@ -34,23 +34,15 @@ def read_folder():
     return files_df
 
 
-def read_file():
+def read_file(file):
     """
     Reads a CSV file
 
     :return: Pandas dataframe
     """
 
-    # Ask for file
-    file_path = filedialog.askopenfilename()
-    print(f"Selected File Path: {file_path}")
-
     # Read the file to dataframe
-    with open(file_path, "rb") as file:
-        try:
-            file_df = pd.read_csv(file, delimiter=",")
-        except:
-            print("Something went wrong reading the file. Is it a CSV?")
+    file_df = pd.read_csv(file, delimiter=",")
 
     # Sets index to be [0,n]
     file_df = file_df.reset_index()
@@ -58,12 +50,13 @@ def read_file():
     return file_df
 
 
-def file_processor(columns=None, target="file", export=False):
+def file_processor(columns=None, target="file", export=False, uploaded=None):
     """
     Reads a CSV file selected by the user with the file browser.
 
     Column list example: ["frame_no", "timestamp", "rx-green", "ry-green"]
 
+    :param uploaded: file from Streamlit
     :param export: Exports a csv if True
     :param columns: a list of columns desired
     :param target: specify if you want a single file or a folder read: "file" or "folder"
@@ -72,7 +65,7 @@ def file_processor(columns=None, target="file", export=False):
 
     # Read file or file path
     if target == "file":
-        data_df = read_file()
+        data_df = read_file(uploaded)
 
     elif target == "folder":
         data_df = read_folder()
