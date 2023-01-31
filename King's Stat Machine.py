@@ -10,9 +10,9 @@ import streamlit as st
 # Prepare Data ---------------------------------------------------------------------------------------------------------
 
 # File upload widget
-uploaded_file = st.file_uploader("Upload a CSV", type="csv", accept_multiple_files=True)
-if uploaded_file is not None:
-    print(f"Selected File: {uploaded_file}")
+uploaded_file_list = st.file_uploader("Upload a CSV", type="csv", accept_multiple_files=True)
+if uploaded_file_list is not None:
+    print(f"Selected File(s): {uploaded_file_list}")
 
 # Select columns
 # columns = [
@@ -45,15 +45,14 @@ def plot():
 
 
 if __name__ == "__main__":
-    if uploaded_file is not None and st.button("Display Graphs"):
+    if uploaded_file_list is not None and st.button("Display Graphs"):
         # Vars for crop
         start = 0
         end = 100
 
         # Data processing
-        data = kingfiles.file_processor(uploaded_file)
-        data = kingfunky.na_dropper(data)
-        data = kingfunky.data_cropper(data, start, end, True)
+        data = kingfiles.file_processor(uploaded_file_list)
+        data = kingfunky.na_dropper(data, export=True)
 
         # Plot the data
         plot()
