@@ -44,6 +44,8 @@ def plot():
     st.pyplot(fig)
 
 
+def auto_plot(df):
+
 if __name__ == "__main__":
     if uploaded_file_list is not None and st.button("Display Graphs"):
         # Vars for crop
@@ -52,7 +54,7 @@ if __name__ == "__main__":
 
         # Data processing
         data = kingfiles.file_processor(uploaded_file_list, export=True)
-        data = kingfunky.na_dropper(data, export=True)
+        data = kingfunky.na_dropper(data, threshold=100, export=True)
 
         # Plot the data
         plot()

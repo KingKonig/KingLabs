@@ -32,7 +32,7 @@ def na_dropper(df, threshold=None, export=False):
     if threshold is not None:
         df.dropna(axis=1, thresh=threshold, inplace=True)
 
-    df.dropna(axis=1, how="all", inplace=True)
+    df.dropna(axis=1, thresh=1, inplace=True)
     df.dropna(axis=0, how="any", inplace=True)
 
     if export:
