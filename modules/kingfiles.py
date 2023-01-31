@@ -5,6 +5,7 @@ import glob
 import os
 import streamlit as st
 
+
 # Functions
 def read_folder():
     """
@@ -42,21 +43,21 @@ def read_file(file):
     """
 
     # Read the file to dataframe
-    file_df = pd.read_csv(file, delimiter=",")
+    df = pd.read_csv(file, delimiter=",")
 
     # Sets index to be [0,n]
-    file_df = file_df.reset_index()
+    df = df.reset_index()
 
-    return file_df
+    return df
 
 
-def file_processor(columns=None, target="file", export=False, uploaded=None):
+def file_processor(file=None, columns=None, target="file", export=False):
     """
     Reads a CSV file selected by the user with the file browser.
 
     Column list example: ["frame_no", "timestamp", "rx-green", "ry-green"]
 
-    :param uploaded: file from Streamlit
+    :param file: file from Streamlit
     :param export: Exports a csv if True
     :param columns: a list of columns desired
     :param target: specify if you want a single file or a folder read: "file" or "folder"
@@ -65,10 +66,10 @@ def file_processor(columns=None, target="file", export=False, uploaded=None):
 
     # Read file or file path
     if target == "file":
-        data_df = read_file(uploaded)
+        df = read_file(file)
 
     elif target == "folder":
-        data_df = read_folder()
+        df = read_folder()
 
     else:
         raise Exception(
@@ -78,26 +79,9 @@ def file_processor(columns=None, target="file", export=False, uploaded=None):
 
     # Selects columns to keep
     if columns is not None:
-        data_df = data_df[columns]
+        df = df[columns]
 
     if export:
-        data_df.to_csv("Data.csv", index=False)
-
-    return data_df
-
-
-def na_dropper(df, threshold=None):
-    """
-    Drops any row with missing data and drops columns that don't hit the threshold
-
-    :param df: any pandas dataframe
-    :param threshold: minimum amount of data points for a column if the threshold is 0 then no columns with be dropped
-    :return: cleaned pandas dataframe
-    """
-
-    if threshold is not None:
-        df.dropna(axis=1, thresh=threshold, inplace=True)
-
-    df.dropna(axis=0, how="any", inplace=True)
+        df.to_csv("Data.csv", index=False)
 
     return df
