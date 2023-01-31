@@ -45,6 +45,31 @@ def plot():
 
 
 def auto_plot(df):
+    # Get headers of dataset
+    headers = df.columns.values.tolist()
+
+    # Iterate to find how many graphs are needed
+    n_graphs = 0
+    skip_list = ["index", "frame_no", "timestamp"]
+
+    for header in headers:
+        if header in skip_list:
+            continue
+        n_graphs += 1
+
+
+    # Setup plot figure
+
+
+    plt.style.use("dark_background")
+    fig, axs = plt.subplots(2, 2)
+    plt.subplots_adjust(wspace=0.5, hspace=0.5)
+
+    # Grab values for x axis
+    x_axis = df.loc[:, "timestamp"]
+
+
+
 
 if __name__ == "__main__":
     if uploaded_file_list is not None and st.button("Display Graphs"):
@@ -57,4 +82,5 @@ if __name__ == "__main__":
         data = kingfunky.na_dropper(data, threshold=100, export=True)
 
         # Plot the data
-        plot()
+        # plot()
+        auto_plot(data)
