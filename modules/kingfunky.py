@@ -1,4 +1,7 @@
 # Imports
+import matplotlib.pyplot as plt
+import streamlit as st
+
 
 # Functions
 def data_cropper(df, start, end, export=False):
@@ -39,3 +42,56 @@ def na_dropper(df, threshold=None, export=False):
         df.to_csv("data-na_dropper.csv", index=False)
 
     return df
+
+
+def auto_plot(df):
+    # Get headers of dataset
+    headers = df.columns.values.tolist()
+
+    # Iterate to find how many graphs are needed
+    n_graphs = 0
+    skip_list = ["index", "frame_no", "timestamp"]
+
+    for header in headers:
+        if header in skip_list:
+            continue
+        n_graphs += 1
+
+    # Setup plot figure
+    n_columns = 3
+    if n_graphs % n_columns == 0:
+        n_rows = n_graphs // n_columns
+    else:
+        n_rows = (n_graphs // n_columns) + 1
+
+    plt.style.use("dark_background")
+    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 5, n_rows * 5))
+    # plt.subplots_adjust(wspace=0.5, hspace=0.5)
+
+    # Grab values for x axis
+    x_axis = df.iloc[:, 0]
+
+    # Plot
+    current_row = 0
+    current_column = 0
+
+    for header in headers:
+        if header in skip_list:
+            continue
+
+        if current_column > n_columns - 1:
+            current_row += 1
+            current_column = 0
+
+        axs[current_row, current_column].plot(
+            x_axis,
+            df[header],
+        )
+
+        axs[current_row, current_column].set_title(header)
+
+        print(f"Plot {header} completed.")
+
+        current_column += 1
+
+    return fig

@@ -1,113 +1,66 @@
 # Imports
-from modules import kingfiles, kingstats, kingfunky
-import pandas as pd
-import matplotlib.pyplot as plt
-import statistics as stat
-import numpy as np
+from modules import kingfiles, kingstats, kingfunky, kingdatagen
 import streamlit as st
-
-# Main
-# Prepare Data ---------------------------------------------------------------------------------------------------------
-
-# File upload widget
-uploaded_file_list = st.file_uploader("Upload a CSV", type="csv", accept_multiple_files=True)
-# if uploaded_file_list is not None:
-#     print(f"Selected File(s): {uploaded_file_list}")
-
-# Select columns
-# columns = [
-#     "Time(seconds)",
-#     "Load Cell (lbf)",
-#     "Run Tank Pressure (psig)",
-#     "Combustion Chamber Pressure (psig)",
-# ]
-
-# Calcs ----------------------------------------------------------------------------------------------------------------
-
-
-# Plots ----------------------------------------------------------------------------------------------------------------
-def plot():
-    plt.style.use("dark_background")
-    fig, axs = plt.subplots(2, 2)
-    plt.subplots_adjust(wspace=0.5, hspace=0.5)
-
-    # Example:
-    # # Time vs Load Cell
-    # axs[0, 0].plot(
-    #     data["Time(seconds)"],
-    #     data["Load Cell (lbf)"],
-    #     c="green"
-    # )
-
-    # Web GUI
-    st.title("SET Data")
-    st.pyplot(fig)
-
-
-def auto_plot(df):
-    # Get headers of dataset
-    headers = df.columns.values.tolist()
-
-    # Iterate to find how many graphs are needed
-    n_graphs = 0
-    skip_list = ["index", "frame_no", "timestamp"]
-
-    for header in headers:
-        if header in skip_list:
-            continue
-        n_graphs += 1
-
-    # Setup plot figure
-    n_columns = 3
-    if n_graphs % n_columns == 0:
-        n_rows = n_graphs // n_columns
-    else:
-        n_rows = (n_graphs // n_columns) + 1
-
-    plt.style.use("dark_background")
-    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 5, n_rows * 5))
-    # plt.subplots_adjust(wspace=0.5, hspace=0.5)
-
-    # Grab values for x axis
-    x_axis = df["timestamp"]
-
-    # Plot
-    current_row = 0
-    current_column = 0
-
-    for header in headers:
-        if header in skip_list:
-            continue
-
-        if current_column > n_columns - 1:
-            current_row += 1
-            current_column = 0
-
-        axs[current_row, current_column].plot(
-            x_axis,
-            df[header],
-        )
-
-        axs[current_row, current_column].set_title(header)
-
-        print(f"Plot {header} completed.")
-
-        current_column += 1
-
-    # Send to streamlit
-    st.pyplot(fig)
+import os
 
 
 if __name__ == "__main__":
-    if uploaded_file_list is not None and st.button("Display Graphs"):
-        # Vars for crop
-        start = 0
-        end = 100
+    # Setup tabs
+    tab_upload, tab_generate, tab_plot = st.tabs(["Upload", "Data Generator", "Plot"])
 
-        # Data processing
-        data = kingfiles.file_processor(uploaded_file_list, export=True)
-        data = kingfunky.na_dropper(data, threshold=100, export=True)
+    # Upload tab
+    with tab_upload:
+        uploaded_files = st.file_uploader("Upload a CSV", type="csv", accept_multiple_files=True)
 
-        # Plot the data
-        # plot()
-        auto_plot(data)
+    # data Generator tab
+    with tab_generate:
+        col_param, col_download = st.columns(2)
+
+        with col_param:
+            # Set params
+            with st.form("Generation Parameters"):
+                st.write("Generation Parameters")
+
+                gen_type = st.checkbox("Scatter-plot")
+                gen_ex = st.text_input("Expression (python):")
+                gen_min = int(st.text_input("Minimum:", value=0))
+                gen_max = int(st.text_input("Maximum", value=1))
+                gen_n = int(st.text_input("n Points", value=10))
+
+                submitted = st.form_submit_button("Generate")
+
+                if submitted:
+                    st.write(f"f(x) = {gen_ex}, starting at {gen_min} and ending at {gen_max}.")
+
+            # Send to generator
+            gen_data, fig = kingdatagen.express_gen(gen_ex, gen_min, gen_max, gen_n, gen_type)
+
+            # Show plot
+        if submitted:
+            st.pyplot(fig)
+
+        with col_download:
+            # Save to nameable csv
+            with st.form("Download"):
+                file_name = st.text_input("File name (don't forget the .csv):")
+                filepath = (os.getcwd() + "/data/" + file_name)
+
+                if st.form_submit_button("Download"):
+                    gen_data.to_csv(filepath, index=False)
+
+    # Plot tab
+    with tab_plot:
+        if uploaded_files:
+            if st.button("Display Graphs"):
+                # Vars for crop
+                start = 0
+                end = 100
+
+                # data processing
+                data = kingfiles.file_processor(uploaded_files, export=True)
+                data = kingfunky.na_dropper(data, threshold=100, export=True)
+
+                # Plot the data
+                st.pyplot(kingfunky.auto_plot(data))
+        else:
+            st.write("You need to upload data before trying to plot!")
