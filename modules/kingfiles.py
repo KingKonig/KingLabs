@@ -25,6 +25,25 @@ def read_files(file_list):
     return df
 
 
+# def list_read(file_list):
+#     """
+#     Reads a list of CSV files
+#
+#     :return: Pandas dataframe
+#     """
+#
+#     # Setup list for dataframes
+#     df_list = []
+#
+#     # Read the file to dataframe
+#     for file in file_list:
+#         file_df = pd.read_csv(file, delimiter=",")
+#
+#         df_list.append(file_df)
+#
+#     return df_list
+
+
 def file_processor(file_list=None, columns=None, interpolate=False, export=False):
     """
     Reads a CSV file selected by the user with the file browser.
@@ -38,7 +57,7 @@ def file_processor(file_list=None, columns=None, interpolate=False, export=False
     :return: Pandas dataframe with specified columns
     """
 
-    # Read file or file path
+    # Read list of files
     if file_list is not None:
         df = read_files(file_list)
 
