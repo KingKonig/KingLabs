@@ -50,7 +50,7 @@ def auto_plot(df):
 
     # Iterate to find how many graphs are needed
     n_graphs = 0
-    skip_list = ["index", "frame_no", "timestamp"]
+    skip_list = ["index", "frame_no", "timestamp", "x"]
 
     for header in headers:
         if header in skip_list:
@@ -61,6 +61,8 @@ def auto_plot(df):
     n_columns = 3
     if n_graphs % n_columns == 0:
         n_rows = n_graphs // n_columns
+    elif n_graphs < n_columns:
+        n_rows = 2
     else:
         n_rows = (n_graphs // n_columns) + 1
 
@@ -69,7 +71,7 @@ def auto_plot(df):
     # plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
     # Grab values for x axis
-    x_axis = df.iloc[:, 0]
+    x_axis = df.iloc[:, 1]
 
     # Plot
     current_row = 0
