@@ -17,7 +17,7 @@ def read_files(file_list):
     for file in file_list:
         file_df = pd.read_csv(file, delimiter=",")
 
-        df = pd.concat([df, file_df])
+        df = pd.concat([df, file_df], axis=1)
 
     # Sets index to be [0,n]
     df = df.reset_index()
@@ -25,12 +25,13 @@ def read_files(file_list):
     return df
 
 
-def file_processor(file_list=None, columns=None, export=False):
+def file_processor(file_list=None, columns=None, interpolate=False, export=False):
     """
     Reads a CSV file selected by the user with the file browser.
 
     Column list example: ["frame_no", "timestamp", "rx-green", "ry-green"]
 
+    :param interpolate:
     :param file_list: file from Streamlit
     :param export: Exports a csv if True
     :param columns: a list of columns desired
@@ -49,6 +50,9 @@ def file_processor(file_list=None, columns=None, export=False):
     # Selects columns to keep
     if columns is not None:
         df = df[columns]
+
+    if interpolate:
+        df = df.interpolate(method="linear", axis=0)
 
     if export:
         df.to_csv("data-file_processor.csv", index=False)

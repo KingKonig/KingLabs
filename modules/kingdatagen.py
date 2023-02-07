@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def express_gen(expression, lower_lim, upper_lim, n, scatter):
+def express_gen(expression, lower_lim, upper_lim, n, scatter, y_label):
     # Setup dataframe
-    df = pd.DataFrame(columns=["x", "y"])
+    df = pd.DataFrame(columns=["x", y_label])
 
     # Find list of x's to use
     x = lower_lim
@@ -23,7 +23,7 @@ def express_gen(expression, lower_lim, upper_lim, n, scatter):
     for x in x_list:
         y = eval(expression)
 
-        point_df = pd.DataFrame([[x, y]], columns=["x", "y"])
+        point_df = pd.DataFrame([[x, y]], columns=["x", y_label])
         df = pd.concat([df, point_df], ignore_index=True)
 
     # Plot
@@ -33,30 +33,18 @@ def express_gen(expression, lower_lim, upper_lim, n, scatter):
     if scatter:
         axs.scatter(
             df["x"],
-            df["y"]
+            df[y_label]
         )
 
     else:
         axs.plot(
             df["x"],
-            df["y"]
+            df[y_label]
         )
 
     axs.set_title("Generated Function")
     axs.set_xlabel("x")
-    axs.set_ylabel("y")
+    axs.set_ylabel(y_label)
 
     # Output
     return df, fig
-
-
-if __name__ == "__main__":
-    data = express_gen(
-        input("Input an expression: "),
-        int(input("Lower limit: ")),
-        int(input("Upper limit: ")),
-        100,
-        True
-    )
-
-    print(data)
