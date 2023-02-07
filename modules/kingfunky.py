@@ -44,52 +44,39 @@ def na_dropper(df, threshold=None, export=False):
     return df
 
 
-def auto_plot(df):
-    # Get headers of dataset
-    headers = df.columns.values.tolist()
-
-    # Iterate to find how many graphs are needed
-    n_graphs = 0
-    skip_list = ["index", "frame_no", "timestamp", "x"]
-
-    for header in headers:
-        if header in skip_list:
-            continue
-        n_graphs += 1
+def auto_plot(frame_list):
+    # Get amount of plots
+    n_graphs = len(frame_list)
 
     # Setup plot figure
-    n_columns = 3
+    if n_graphs < 3:
+        n_columns = n_graphs
+    else:
+        n_columns = 3
+
     if n_graphs % n_columns == 0:
         n_rows = n_graphs // n_columns
-    elif n_graphs < n_columns:
-        n_rows = 2
     else:
         n_rows = (n_graphs // n_columns) + 1
 
     plt.style.use("dark_background")
     fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 5, n_rows * 5))
-    # plt.subplots_adjust(wspace=0.5, hspace=0.5)
-
-    # Grab values for x axis
-    x_axis = df.iloc[:, 1]
 
     # Plot
     current_row = 0
     current_column = 0
 
-    for header in headers:
-        if header in skip_list:
-            continue
-
+    for frame in frame_list:
         if current_column > n_columns - 1:
             current_row += 1
             current_column = 0
 
         axs[current_row, current_column].plot(
-            x_axis,
-            df[header],
+            frame.iloc[0],
+            frame.iloc[1],
         )
 
+        header = frame.columns.values.tolist()[1]
         axs[current_row, current_column].set_title(header)
 
         print(f"Plot {header} completed.")

@@ -3,7 +3,7 @@ import pandas as pd
 
 
 # Functions
-def read_files(file_list):
+def frame_read(file_list):
     """
     Reads a list of CSV files
 
@@ -25,23 +25,23 @@ def read_files(file_list):
     return df
 
 
-# def list_read(file_list):
-#     """
-#     Reads a list of CSV files
-#
-#     :return: Pandas dataframe
-#     """
-#
-#     # Setup list for dataframes
-#     df_list = []
-#
-#     # Read the file to dataframe
-#     for file in file_list:
-#         file_df = pd.read_csv(file, delimiter=",")
-#
-#         df_list.append(file_df)
-#
-#     return df_list
+def list_read(file_list):
+    """
+    Reads a list of CSV files
+
+    :return: Pandas dataframe
+    """
+
+    # Setup list for dataframes
+    df_list = []
+
+    # Read the file to dataframe
+    for file in file_list:
+        file_df = pd.read_csv(file, delimiter=",")
+
+        df_list.append(file_df)
+
+    return df_list
 
 
 def file_processor(file_list=None, columns=None, interpolate=False, export=False):
@@ -59,7 +59,7 @@ def file_processor(file_list=None, columns=None, interpolate=False, export=False
 
     # Read list of files
     if file_list is not None:
-        df = read_files(file_list)
+        df_list = list_read(file_list)
 
     else:
         raise Exception(
@@ -68,12 +68,15 @@ def file_processor(file_list=None, columns=None, interpolate=False, export=False
 
     # Selects columns to keep
     if columns is not None:
-        df = df[columns]
+        for i, df in enumerate(df_list):
+            df_list[i] = df[columns]
 
     if interpolate:
-        df = df.interpolate(method="linear", axis=0)
+        for i, df in enumerate(df_list):
+            df_list[i] = df.interpolate(method="linear", axis=0)
 
     if export:
-        df.to_csv("data-file_processor.csv", index=False)
+        for i, df in enumerate(df_list):
+            df.to_csv(f"data-file_processor{i}.csv", index=False)
 
-    return df
+    return df_list
