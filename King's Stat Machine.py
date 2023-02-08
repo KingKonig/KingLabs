@@ -57,7 +57,7 @@ if __name__ == "__main__":
                 end = 9
 
                 # data processing
-                frame_list = kingfiles.file_processor(uploaded_files, interpolate=False, export=True)
+                frame_list = kingfiles.file_processor(uploaded_files, interpolate=False)
                 # for i, frame in enumerate(frame_list):
                 #     frame_list[i] = kingfunky.na_dropper(frame, threshold=1, export=True)
                 # data = kingfunky.data_cropper(data, start, end)

@@ -66,7 +66,7 @@ def auto_plot(frame_list):
     current_row = 0
     current_column = 0
 
-    for frame in frame_list:
+    for frame in frame_list:    # Possibly iterate over rows and columns instead and use "axs[0, 1].remove()" excess axs
         if current_column > n_columns - 1:
             current_row += 1
             current_column = 0

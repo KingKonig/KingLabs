@@ -15,6 +15,7 @@ def express_gen(expression, lower_lim, upper_lim, n, scatter, y_label):
         x += (upper_lim - lower_lim) / n
 
         if x > upper_lim:
+            # x_list.append(upper_lim)    # L
             break
 
         x_list.append(x)
