@@ -72,8 +72,8 @@ def auto_plot(frame_list):
             current_column = 0
 
         axs[current_row, current_column].plot(
-            frame.iloc[0],
-            frame.iloc[1],
+            frame.iloc[:, 0].to_list(),
+            frame.iloc[:, 1].to_list(),
         )
 
         header = frame.columns.values.tolist()[1]
