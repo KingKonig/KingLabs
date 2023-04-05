@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
                 # data processing
                 data = kingfiles.file_processor(uploaded_files, interpolate=False, export=True)
-                data = kingfunky.na_dropper(data, threshold=1, export=True)
+                # data = kingfunky.na_dropper(data, threshold=1, export=True)
                 # data = kingfunky.data_cropper(data, start, end)
 
                 # Plot the data

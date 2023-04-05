@@ -1,6 +1,6 @@
 # Imports
 import matplotlib.pyplot as plt
-import streamlit as st
+from modules import kingstats
 
 
 # Functions
@@ -44,6 +44,16 @@ def na_dropper(df, threshold=None, export=False):
     return df
 
 
+# def butter_lowpass(cutoff, sample_rate, order=5):
+#     return butter(order, cutoff, fs=sample_rate, btype='low', analog=False)
+#
+#
+# def lowpass(data, cutoff, sample_rate, order):
+#     b, a = butter_lowpass(cutoff, sample_rate, order=order)
+#     y = lfilter(b, a, data)
+#     return y
+
+
 def auto_plot(df):
     # Get headers of dataset
     headers = df.columns.values.tolist()
@@ -85,9 +95,12 @@ def auto_plot(df):
             current_row += 1
             current_column = 0
 
+        n = 500   # N FOR AVERAGE
+
         axs[current_row, current_column].plot(
-            x_axis,
-            df[header],
+            kingstats.moving_average(x_axis, n),
+            kingstats.moving_average(df[header], n),
+            linewidth=0.5
         )
 
         axs[current_row, current_column].set_title(header)
