@@ -95,7 +95,7 @@ def auto_plot(df):
             current_row += 1
             current_column = 0
 
-        n = 500   # N FOR AVERAGE
+        n = 1000   # N FOR AVERAGE
 
         axs[current_row, current_column].plot(
             kingstats.moving_average(x_axis, n),
