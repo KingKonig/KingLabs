@@ -1,6 +1,7 @@
 # Imports
 import numpy as np
 import pandas as pd
+from scipy.signal import butter,filtfilt
 
 
 # Functions
@@ -171,3 +172,18 @@ def magnitude(x_list):
     magnitude_out = np.sqrt(square_xs)
 
     return magnitude_out
+
+
+def lowpassinator(data_x, data_y, fs=1000, fc=100, order=4):
+    # Filter requirements.
+    # fs = 1000 sample rate, Hz
+    # fc = 100 Cutoff frequency
+    # order = 4
+
+    delta_data_x = np.diff(data_x)
+
+    filter_coefficients = butter(order, fc / (fs / 2), "low")
+
+    filtered_data = filtfilt(filter_coefficients[0], filter_coefficients[1], data_y)
+
+    return filtered_data
