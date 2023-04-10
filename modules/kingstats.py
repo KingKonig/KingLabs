@@ -174,13 +174,14 @@ def magnitude(x_list):
     return magnitude_out
 
 
-def lowpassinator(data_x, data_y, fs=1000, fc=100, order=4):
+def lowpassinator(data_x, data_y, fc=1000, order=4):
     # Filter requirements.
     # fs = 1000 sample rate, Hz
     # fc = 100 Cutoff frequency
     # order = 4
 
-    delta_data_x = np.diff(data_x)
+    delta_data_x = np.mean(np.diff(data_x))
+    fs = 1 / delta_data_x
 
     filter_coefficients = butter(order, fc / (fs / 2), "low")
 

@@ -77,7 +77,7 @@ def auto_plot(df):
         n_rows = (n_graphs // n_columns) + 1
 
     plt.style.use("dark_background")
-    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 5, n_rows * 5))
+    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 10, n_rows * 10))
     # plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
     # Grab values for x axis
@@ -98,8 +98,10 @@ def auto_plot(df):
         n = 1000   # N FOR AVERAGE
 
         axs[current_row, current_column].plot(
-            kingstats.moving_average(x_axis, n),
-            kingstats.moving_average(df[header], n),
+            # kingstats.moving_average(x_axis, n),
+            # kingstats.moving_average(df[header], n),
+            x_axis,
+            kingstats.lowpassinator(x_axis, df[header]),
             linewidth=0.5
         )
 
