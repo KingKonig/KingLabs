@@ -100,18 +100,18 @@ def auto_plot(df):
         # n = 1000
 
         # For FFT
-        # delta_data_x = np.mean(np.diff(df[header]))
-        # fs = 1 / delta_data_x
-        #
-        # f_vec = np.fft.fftfreq(len(df[header]), 1 / fs)
-        #
-        # # define bounds for x
-        # axs[current_row, current_column].set_xlim([-10, 10])
+        delta_data_x = np.mean(np.diff(df[header]))
+        fs = 1 / delta_data_x
+
+        f_vec = np.fft.fftfreq(len(df[header]), 1 / fs)
+
+        # define bounds for x
+        axs[current_row, current_column].set_xlim([-0.1, 1])
 
         axs[current_row, current_column].plot(
             # Raw data
-            x_axis,
-            df[header],
+            # x_axis,
+            # df[header],
 
             # Moving average
             # kingstats.moving_average(x_axis, n),
@@ -122,8 +122,8 @@ def auto_plot(df):
             # kingstats.lowpassinator(x_axis, df[header]),
 
             # FFT
-            # f_vec,
-            # np.abs(np.fft.fft(df[header])),
+            f_vec,
+            np.abs(np.fft.fft(df[header])),
             linewidth=1
         )
 
