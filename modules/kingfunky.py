@@ -1,6 +1,7 @@
 # Imports
 import matplotlib.pyplot as plt
 from modules import kingstats
+import numpy as np
 
 
 # Functions
@@ -95,14 +96,35 @@ def auto_plot(df):
             current_row += 1
             current_column = 0
 
-        n = 1000   # N FOR AVERAGE
+        # For moving average
+        # n = 1000
+
+        # For FFT
+        # delta_data_x = np.mean(np.diff(df[header]))
+        # fs = 1 / delta_data_x
+        #
+        # f_vec = np.fft.fftfreq(len(df[header]), 1 / fs)
+        #
+        # # define bounds for x
+        # axs[current_row, current_column].set_xlim([-10, 10])
 
         axs[current_row, current_column].plot(
+            # Raw data
+            x_axis,
+            df[header],
+
+            # Moving average
             # kingstats.moving_average(x_axis, n),
             # kingstats.moving_average(df[header], n),
-            x_axis,
-            kingstats.lowpassinator(x_axis, df[header]),
-            linewidth=0.5
+
+            # Lowpass filter
+            # x_axis,
+            # kingstats.lowpassinator(x_axis, df[header]),
+
+            # FFT
+            # f_vec,
+            # np.abs(np.fft.fft(df[header])),
+            linewidth=1
         )
 
         axs[current_row, current_column].set_title(header)
