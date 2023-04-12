@@ -55,7 +55,7 @@ def na_dropper(df, threshold=None, export=False):
 #     return y
 
 
-def auto_plot(df):
+def auto_plot(df, plot_type="line", data_modifier=str, modifier_arguments=tuple, filter_modifier=tuple):
     # Get headers of dataset
     headers = df.columns.values.tolist()
 
@@ -96,36 +96,49 @@ def auto_plot(df):
             current_row += 1
             current_column = 0
 
-        # For moving average
-        # n = 1000
+        if data_modifier == "moving average":
+            n = filter_modifier[0]
+            x_axis = kingstats.moving_average(x_axis, n)
+            y_axis = kingstats.moving_average(df[header], n)
 
-        # For FFT
-        delta_data_x = np.mean(np.diff(df[header]))
-        fs = 1 / delta_data_x
+        elif data_modifier == "lowpass":
+            fc, order = filter_modifier
+            y_axis = kingstats.lowpassinator(x_axis, df[header], fc, order)
 
-        f_vec = np.fft.fftfreq(len(df[header]), 1 / fs)
+        elif data_modifier == "fft":
+            # Some required information to get
+            delta_data_x = np.mean(np.diff(df[header]))
+            fs = 1 / delta_data_x
 
-        # define bounds for x
-        axs[current_row, current_column].set_xlim([-0.1, 1])
+            # define bounds for x
+            # axs[current_row, current_column].set_xlim([-1, 10])
 
-        axs[current_row, current_column].plot(
-            # Raw data
-            # x_axis,
-            # df[header],
+            x_axis = np.fft.fftfreq(len(df[header]), 1 / fs)
+            y_axis = np.abs(np.fft.fft(df[header]))
 
-            # Moving average
-            # kingstats.moving_average(x_axis, n),
-            # kingstats.moving_average(df[header], n),
+        elif data_modifier == "":
+            y_axis = df[header]
 
-            # Lowpass filter
-            # x_axis,
-            # kingstats.lowpassinator(x_axis, df[header]),
+        else:
+            raise Exception("Something is wrong with the data modifier")
 
-            # FFT
-            f_vec,
-            np.abs(np.fft.fft(df[header])),
-            linewidth=1
-        )
+        # Plot the data
+        if plot_type == "line":
+            axs[current_row, current_column].plot(
+                x_axis,
+                y_axis,
+                linewidth=0.5
+            )
+
+        elif plot_type == "scatter":
+            axs[current_row, current_column].scatter(
+                x_axis,
+                y_axis,
+                linewidth=0.5
+            )
+
+        else:
+            raise Exception("Something is wrong with the plot type")
 
         axs[current_row, current_column].set_title(header)
 

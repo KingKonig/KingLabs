@@ -174,7 +174,7 @@ def magnitude(x_list):
     return magnitude_out
 
 
-def lowpassinator(data_x, data_y, fc=1000, order=4):
+def lowpassinator(data_x, data_y, fc=1, order=2):
     # Filter requirements.
     # fs = 1000 sample rate, Hz
     # fc = 100 Cutoff frequency
