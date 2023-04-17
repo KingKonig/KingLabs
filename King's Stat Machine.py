@@ -50,18 +50,40 @@ if __name__ == "__main__":
 
     # Plot tab
     with tab_plot:
+        # load data
+        data = kingfiles.file_processor(uploaded_files, interpolate=False, export=True)
+        # Vars for crop
+        # start = -9
+        # end = 9
+        # data = kingfunky.na_dropper(data, threshold=1, export=True)
+        # data = kingfunky.data_cropper(data, start, end)
+
         if uploaded_files:
+            # Graph Type Drop Down
+            plot_type = st.selectbox(
+                "Plot Style:",
+                ("Line", "Scatter")
+            )
+
+            # Data processing drop down
+            post_processor = st.selectbox(
+                "Data Post-Processor:",
+                ("None", "Moving Average", "Lowpass", "FFT")
+            )
+
+            # Processor arguments
+            if post_processor == "Moving Average":
+                processor_arguments =
+
+            elif post_processor == "Lowpass":
+                processor_arguments =
+
+            elif post_processor == "Lowpass":
+                processor_arguments =
+
+            # Graph Button
             if st.button("Display Graphs"):
-                # Vars for crop
-                start = -9
-                end = 9
-
-                # data processing
-                data = kingfiles.file_processor(uploaded_files, interpolate=False, export=True)
-                # data = kingfunky.na_dropper(data, threshold=1, export=True)
-                # data = kingfunky.data_cropper(data, start, end)
-
                 # Plot the data
-                st.pyplot(kingfunky.auto_plot(data))
+                st.pyplot(kingfunky.auto_plot(data, plot_type, post_processor, processor_arguments))
         else:
             st.write("You need to upload data before trying to plot!")

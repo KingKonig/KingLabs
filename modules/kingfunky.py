@@ -55,7 +55,7 @@ def na_dropper(df, threshold=None, export=False):
 #     return y
 
 
-def auto_plot(df, plot_type="line", data_modifier=str, modifier_arguments=tuple, filter_modifier=tuple):
+def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tuple):
     # Get headers of dataset
     headers = df.columns.values.tolist()
 
@@ -96,16 +96,16 @@ def auto_plot(df, plot_type="line", data_modifier=str, modifier_arguments=tuple,
             current_row += 1
             current_column = 0
 
-        if data_modifier == "moving average":
-            n = filter_modifier[0]
+        if post_processor == "Moving Average":
+            n = processor_arguments[0]
             x_axis = kingstats.moving_average(x_axis, n)
             y_axis = kingstats.moving_average(df[header], n)
 
-        elif data_modifier == "lowpass":
-            fc, order = filter_modifier
+        elif post_processor == "Lowpass":
+            fc, order = processor_arguments
             y_axis = kingstats.lowpassinator(x_axis, df[header], fc, order)
 
-        elif data_modifier == "fft":
+        elif post_processor == "FFT":
             # Some required information to get
             delta_data_x = np.mean(np.diff(df[header]))
             fs = 1 / delta_data_x
@@ -116,21 +116,18 @@ def auto_plot(df, plot_type="line", data_modifier=str, modifier_arguments=tuple,
             x_axis = np.fft.fftfreq(len(df[header]), 1 / fs)
             y_axis = np.abs(np.fft.fft(df[header]))
 
-        elif data_modifier == "":
+        else:
             y_axis = df[header]
 
-        else:
-            raise Exception("Something is wrong with the data modifier")
-
         # Plot the data
-        if plot_type == "line":
+        if plot_type == "Line":
             axs[current_row, current_column].plot(
                 x_axis,
                 y_axis,
                 linewidth=0.5
             )
 
-        elif plot_type == "scatter":
+        elif plot_type == "Scatter":
             axs[current_row, current_column].scatter(
                 x_axis,
                 y_axis,
