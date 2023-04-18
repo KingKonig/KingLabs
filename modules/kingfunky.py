@@ -111,7 +111,7 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
             fs = 1 / delta_data_x
 
             # define bounds for x
-            # axs[current_row, current_column].set_xlim([-1, 10])
+            axs[current_row, current_column].set_xlim([0, 20])
 
             x_axis = np.fft.fftfreq(len(df[header]), 1 / fs)
             y_axis = np.abs(np.log(np.fft.fft(df[header])))
