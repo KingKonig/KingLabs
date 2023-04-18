@@ -73,17 +73,17 @@ if __name__ == "__main__":
 
             # Processor arguments
             if post_processor == "Moving Average":
-                processor_arguments =
+                processor_arguments = ""
 
             elif post_processor == "Lowpass":
-                processor_arguments =
+                processor_arguments = ""
 
             elif post_processor == "Lowpass":
-                processor_arguments =
+                processor_arguments = ""
 
             # Graph Button
             if st.button("Display Graphs"):
                 # Plot the data
-                st.pyplot(kingfunky.auto_plot(data, plot_type, post_processor, processor_arguments))
+                st.pyplot(kingfunky.auto_plot(data, plot_type, post_processor))
         else:
             st.write("You need to upload data before trying to plot!")

@@ -114,7 +114,7 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
             # axs[current_row, current_column].set_xlim([-1, 10])
 
             x_axis = np.fft.fftfreq(len(df[header]), 1 / fs)
-            y_axis = np.abs(np.fft.fft(df[header]))
+            y_axis = np.abs(np.log(np.fft.fft(df[header])))
 
         else:
             y_axis = df[header]
