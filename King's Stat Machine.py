@@ -59,6 +59,7 @@ if __name__ == "__main__":
         # data = kingfunky.data_cropper(data, start, end)
 
         if uploaded_files:
+            processor_arguments = tuple
             # Graph Type Drop Down
             plot_type = st.selectbox(
                 "Plot Style:",
@@ -73,17 +74,16 @@ if __name__ == "__main__":
 
             # Processor arguments
             if post_processor == "Moving Average":
-                processor_arguments = ""
+                processor_arguments = tuple((st.slider("N for moving average", 1, 1000, 1, 10),))
 
             elif post_processor == "Lowpass":
-                processor_arguments = ""
-
-            elif post_processor == "Lowpass":
-                processor_arguments = ""
+                freq_cutoff = st.slider("Frequency cutoff (hz):", 1, 1000, 1, 10)
+                order = st.slider("Filter order:", 1, 10, 4, 1)
+                processor_arguments = freq_cutoff, order
 
             # Graph Button
             if st.button("Display Graphs"):
                 # Plot the data
-                st.pyplot(kingfunky.auto_plot(data, plot_type, post_processor))
+                st.pyplot(kingfunky.auto_plot(data, plot_type, post_processor, processor_arguments))
         else:
             st.write("You need to upload data before trying to plot!")

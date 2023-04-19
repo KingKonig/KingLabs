@@ -81,14 +81,15 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
     fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 10, n_rows * 10))
     # plt.subplots_adjust(wspace=0.5, hspace=0.5)
 
-    # Grab values for x axis
-    x_axis = df.iloc[:, 1]
-
     # Plot
     current_row = 0
     current_column = 0
 
     for header in headers:
+        # Grab values for x axis
+        x_axis = df.iloc[:, 1]  # THIS BEING IN THE LOOP IS BAD
+
+        print(f"Header: {header}")
         if header in skip_list:
             continue
 
@@ -96,7 +97,7 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
             current_row += 1
             current_column = 0
 
-        if post_processor == "Moving Average":
+        if post_processor == "Moving Average":  # Change this shit to a switch statement
             n = processor_arguments[0]
             x_axis = kingstats.moving_average(x_axis, n)
             y_axis = kingstats.moving_average(df[header], n)
