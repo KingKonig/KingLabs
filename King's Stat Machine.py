@@ -12,6 +12,9 @@ if __name__ == "__main__":
     with tab_upload:
         uploaded_files = st.file_uploader("Upload a CSV", type="csv", accept_multiple_files=True)
 
+        # load data
+        data = kingfiles.file_processor(uploaded_files, interpolate=False, export=False)
+
     # data Generator tab
     with tab_generate:
         # col_param, col_download = st.columns(2)
@@ -50,8 +53,6 @@ if __name__ == "__main__":
 
     # Plot tab
     with tab_plot:
-        # load data
-        data = kingfiles.file_processor(uploaded_files, interpolate=False, export=True)
         # Vars for crop
         # start = -9
         # end = 9
@@ -72,12 +73,20 @@ if __name__ == "__main__":
                 ("None", "Moving Average", "Lowpass", "FFT")
             )
 
+            # Choose bounds
+            bounds = st.slider(
+                "Select bounds for X:",
+                0, data.shape[0], (0, data.shape[0])
+            )
+            data = data[bounds[0]:bounds[1]]
+            data = data.reset_index()
+
             # Processor arguments
             if post_processor == "Moving Average":
                 processor_arguments = tuple((st.slider("N for moving average", 1, 1000, 1, 10),))
 
             elif post_processor == "Lowpass":
-                freq_cutoff = st.slider("Frequency cutoff (hz):", 1, 1000, 1, 10)
+                freq_cutoff = st.slider("Frequency cutoff (hz):", 1, 100, 1, 1)
                 order = st.slider("Filter order:", 1, 10, 4, 1)
                 processor_arguments = freq_cutoff, order
 
@@ -85,5 +94,6 @@ if __name__ == "__main__":
             if st.button("Display Graphs"):
                 # Plot the data
                 st.pyplot(kingfunky.auto_plot(data, plot_type, post_processor, processor_arguments))
+
         else:
             st.write("You need to upload data before trying to plot!")

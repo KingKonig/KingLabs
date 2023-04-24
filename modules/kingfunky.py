@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 from modules import kingstats
 import numpy as np
+import streamlit as st
 
 
 # Functions
@@ -55,13 +56,13 @@ def na_dropper(df, threshold=None, export=False):
 #     return y
 
 
-def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tuple):
+def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tuple, bounds=tuple):
     # Get headers of dataset
     headers = df.columns.values.tolist()
 
     # Iterate to find how many graphs are needed
     n_graphs = 0
-    skip_list = ["index", "frame_no", "timestamp", "x"]
+    skip_list = ["index", "frame_no", "timestamp", "x", "time", "level_0"]
 
     for header in headers:
         if header in skip_list:
@@ -85,9 +86,13 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
     current_row = 0
     current_column = 0
 
+    # Start progress bar
+    progress_bar = st.progress(0, text="Operation in progress.")
+    progress_i = 0
+
     for header in headers:
         # Grab values for x axis
-        x_axis = df.iloc[:, 1]  # THIS BEING IN THE LOOP IS BAD
+        x_axis = df.iloc[:, 2]  # THIS BEING IN THE LOOP IS BAD
 
         print(f"Header: {header}")
         if header in skip_list:
@@ -138,10 +143,19 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
         else:
             raise Exception("Something is wrong with the plot type")
 
+        # Set title
         axs[current_row, current_column].set_title(header)
 
-        print(f"Plot {header} completed.")
+        # Display progress
+        progress_i += 1
+        progress = (progress_i / len(headers))
+        progress_bar.progress(progress, text=f"Plot {header} completed.")
 
+        # print(f"Plot {header} completed.")
+
+        # Step column
         current_column += 1
+
+    progress_bar.progress(1, text=f"Plotting Complete")
 
     return fig
