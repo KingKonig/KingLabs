@@ -15,6 +15,50 @@ if __name__ == "__main__":
             # load data
             data = kingfiles.file_processor(uploaded_files, interpolate=False, export=False)
 
+        # Plot tab
+        with st.expander("Plot"):
+            if uploaded_files:
+                processor_arguments = tuple
+                # Graph Type Drop Down
+                plot_type = st.selectbox(
+                    "Plot Style:",
+                    ("Line", "Scatter")
+                )
+
+                # Data processing drop down
+                post_processor = st.selectbox(
+                    "Data Post-Processor:",
+                    ("None", "Moving Average", "Lowpass", "FFT")
+                )
+
+                # Choose bounds
+                bounds = st.slider(
+                    "Crop Data:",
+                    0,
+                    data.shape[0],
+                    (0, data.shape[0])
+                )
+                data = data[bounds[0]:bounds[1]]
+                data = data.reset_index()
+
+                # Processor arguments
+                if post_processor == "Moving Average":
+                    processor_arguments = tuple((st.slider("N for moving average:", 1, 100, 1, 1),))
+
+                elif post_processor == "Lowpass":
+                    freq_cutoff = st.slider("Frequency cutoff (hz):", 1, 100, 1, 1)
+                    order = st.slider("Filter order:", 1, 10, 4, 1)
+                    processor_arguments = freq_cutoff, order
+
+                elif post_processor == "FFT":
+                    processor_arguments = st.slider("Frequency Range:", 0, 100, (1, 20), 1)
+
+                # Quality slider
+                dpi = st.slider("Plot DPI:", 10, 600, 300, 10)
+
+            else:
+                st.write("Please upload a file first.")
+
         # data Generator tab
         with st.expander("Generate"):
             # col_param, col_download = st.columns(2)
@@ -57,50 +101,6 @@ if __name__ == "__main__":
 
                 if st.form_submit_button("Download"):
                     gen_data.to_csv(filepath, index=False)
-
-        # Plot tab
-        with st.expander("Plot"):
-            if uploaded_files:
-                processor_arguments = tuple
-                # Graph Type Drop Down
-                plot_type = st.selectbox(
-                    "Plot Style:",
-                    ("Line", "Scatter")
-                )
-
-                # Data processing drop down
-                post_processor = st.selectbox(
-                    "Data Post-Processor:",
-                    ("None", "Moving Average", "Lowpass", "FFT")
-                )
-
-                # Choose bounds
-                bounds = st.slider(
-                    "Crop Data:",
-                    0,
-                    data.shape[0],
-                    (0, data.shape[0])
-                )
-                data = data[bounds[0]:bounds[1]]
-                data = data.reset_index()
-
-                # Processor arguments
-                if post_processor == "Moving Average":
-                    processor_arguments = tuple((st.slider("N for moving average:", 1, 100, 1, 1),))
-
-                elif post_processor == "Lowpass":
-                    freq_cutoff = st.slider("Frequency cutoff (hz):", 1, 100, 1, 1)
-                    order = st.slider("Filter order:", 1, 10, 4, 1)
-                    processor_arguments = freq_cutoff, order
-
-                elif post_processor == "FFT":
-                    processor_arguments = st.slider("Frequency Range:", 0, 100, (1, 20), 1)
-
-                # Quality slider
-                dpi = st.slider("Plot DPI:", 100, 1000, 300, 100)
-
-            else:
-                st.write("Please upload a file first.")
 
     # Plot the data when an update occurs
     with st.spinner("Matplotlib is thinking really hard..."):

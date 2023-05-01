@@ -80,8 +80,8 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
         n_rows = (n_graphs // n_columns) + 1
 
     plt.style.use("dark_background")
-    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 5, n_rows * 5))
-    plt.subplots_adjust(wspace=0.2, hspace=0.2)
+    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 8, n_rows * 8))
+    plt.subplots_adjust(wspace=0.15, hspace=0.15)
 
     # Plot
     current_row = 0
