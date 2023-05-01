@@ -1,7 +1,7 @@
 # Imports
 import os
 import streamlit as st
-from modules import kingfiles, kingfunky, kingdatagen
+from modules import kingfiles, kingfunction, kingdatagenerator
 
 
 if __name__ == "__main__":
@@ -37,7 +37,7 @@ if __name__ == "__main__":
                 st.write(f"f(x) = {gen_ex}, starting at {gen_min} and ending at {gen_max}.")
 
             # Send to generator
-            gen_data, fig = kingdatagen.express_gen(
+            gen_data, fig = kingdatagenerator.express_gen(
                 gen_ex,
                 gen_min,
                 gen_max,
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             # Graph Button
             if st.button("Display Graphs"):
                 # Plot the data
-                st.pyplot(kingfunky.auto_plot(data, plot_type, post_processor, processor_arguments))
+                st.pyplot(kingfunction.auto_plot(data, plot_type, post_processor, processor_arguments))
 
         else:
             st.write("You need to upload data before trying to plot!")
