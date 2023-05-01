@@ -90,13 +90,14 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
     progress_bar = st.progress(0, text="Operation in progress.")
     progress_i = 0
 
-    for header in headers:
-        # Grab values for x axis
-        x_axis = df.iloc[:, 2]  # THIS BEING IN THE LOOP IS BAD
+    # Grab values for x axis
+    x_axis = df.iloc[:, 2]  # THIS BEING IN THE LOOP IS BAD
 
-        print(f"Header: {header}")
+    for header in headers:
         if header in skip_list:
             continue
+
+        y_axis = df[header]
 
         if current_column > n_columns - 1:
             current_row += 1
@@ -104,39 +105,41 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
 
         if post_processor == "Moving Average":  # Change this shit to a switch statement
             n = processor_arguments[0]
-            x_axis = kingstats.moving_average(x_axis, n)
-            y_axis = kingstats.moving_average(df[header], n)
+            processed_x_axis = x_axis
+            processed_y_axis = kingstats.moving_average(y_axis, n)
 
         elif post_processor == "Lowpass":
             fc, order = processor_arguments
-            y_axis = kingstats.lowpassinator(x_axis, df[header], fc, order)
+            processed_x_axis = x_axis
+            processed_y_axis = kingstats.lowpassinator(x_axis, y_axis, fc, order)
 
         elif post_processor == "FFT":
             # Some required information to get
-            delta_data_x = np.mean(np.diff(df[header]))
+            delta_data_x = np.mean(np.diff(y_axis))
             fs = 1 / delta_data_x
 
             # define bounds for x
             axs[current_row, current_column].set_xlim([0, 20])
 
-            x_axis = np.fft.fftfreq(len(df[header]), 1 / fs)
-            y_axis = np.abs(np.log(np.fft.fft(df[header])))
+            processed_x_axis = np.fft.fftfreq(len(y_axis), 1 / fs)
+            processed_y_axis = np.abs(np.log(np.fft.fft(y_axis)))
 
         else:
-            y_axis = df[header]
+            processed_x_axis = x_axis
+            processed_y_axis = y_axis
 
         # Plot the data
         if plot_type == "Line":
             axs[current_row, current_column].plot(
-                x_axis,
-                y_axis,
+                processed_x_axis,
+                processed_y_axis,
                 linewidth=0.5
             )
 
         elif plot_type == "Scatter":
             axs[current_row, current_column].scatter(
-                x_axis,
-                y_axis,
+                processed_x_axis,
+                processed_y_axis,
                 linewidth=0.5
             )
 
@@ -151,7 +154,7 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
         progress = (progress_i / len(headers))
         progress_bar.progress(progress, text=f"Plot {header} completed.")
 
-        # print(f"Plot {header} completed.")
+        print(f"Plot {header} completed.")
 
         # Step column
         current_column += 1

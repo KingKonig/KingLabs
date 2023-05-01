@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
             # Processor arguments
             if post_processor == "Moving Average":
-                processor_arguments = tuple((st.slider("N for moving average", 1, 1000, 1, 10),))
+                processor_arguments = tuple((st.slider("N for moving average", 1, 100, 1, 1),))
 
             elif post_processor == "Lowpass":
                 freq_cutoff = st.slider("Frequency cutoff (hz):", 1, 100, 1, 1)

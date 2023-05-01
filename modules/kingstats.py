@@ -125,16 +125,13 @@ def moving_average(data_list, n=3):
     """
 
     averaged_data = list()
+    window = n // 2
 
-    for i in range(len(data_list) - n):
-        j_sum = 0
+    for i, point in enumerate(data_list):
+        point_sum = sum(data_list[i-window:i+window])
+        averaged_point = point_sum / n
 
-        for j in range(n):
-            j_sum += data_list[i + (j + 1)]
-
-        average_i = j_sum / n
-        averaged_data.append(average_i)
-
+        averaged_data.append(averaged_point)
     return averaged_data
 
 
