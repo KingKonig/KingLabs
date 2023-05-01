@@ -1,7 +1,7 @@
 # Imports
-from modules import kingfiles, kingstats, kingfunky, kingdatagen
-import streamlit as st
 import os
+import streamlit as st
+from modules import kingfiles, kingfunky, kingdatagen
 
 
 if __name__ == "__main__":
@@ -37,7 +37,14 @@ if __name__ == "__main__":
                 st.write(f"f(x) = {gen_ex}, starting at {gen_min} and ending at {gen_max}.")
 
             # Send to generator
-            gen_data, fig = kingdatagen.express_gen(gen_ex, gen_min, gen_max, gen_n, gen_type, gen_label)
+            gen_data, fig = kingdatagen.express_gen(
+                gen_ex,
+                gen_min,
+                gen_max,
+                gen_n,
+                gen_type,
+                gen_label
+            )
 
             # Show plot
         if submitted:
@@ -46,7 +53,7 @@ if __name__ == "__main__":
         # with col_download:
         # Save to nameable csv
         with st.form("Download"):
-            filepath = (os.getcwd() + "/data/" + gen_label + ".csv")
+            filepath = os.getcwd() + "/data/" + gen_label + ".csv"
 
             if st.form_submit_button("Download"):
                 gen_data.to_csv(filepath, index=False)

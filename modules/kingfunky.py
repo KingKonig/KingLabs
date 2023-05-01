@@ -1,6 +1,6 @@
 # Imports
 import matplotlib.pyplot as plt
-from modules import kingstats
+import kingstats
 import numpy as np
 import streamlit as st
 
@@ -30,7 +30,8 @@ def na_dropper(df, threshold=None, export=False):
 
     :param export:
     :param df: any pandas dataframe
-    :param threshold: minimum amount of data points for a column if the threshold is 0 then no columns with be dropped
+    :param threshold: minimum amount of data points for a column 
+        if the threshold is 0 then no columns with be dropped
     :return: cleaned pandas dataframe
     """
 
@@ -56,7 +57,7 @@ def na_dropper(df, threshold=None, export=False):
 #     return y
 
 
-def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tuple, bounds=tuple):
+def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tuple):
     # Get headers of dataset
     headers = df.columns.values.tolist()
 
@@ -91,12 +92,13 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
     progress_i = 0
 
     # Grab values for x axis
-    x_axis = df.iloc[:, 2]  # THIS BEING IN THE LOOP IS BAD
+    x_axis = df.iloc[:, 2]
 
     for header in headers:
         if header in skip_list:
             continue
 
+        # Grab current y axis
         y_axis = df[header]
 
         if current_column > n_columns - 1:
@@ -144,14 +146,15 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
             )
 
         else:
-            raise Exception("Something is wrong with the plot type")
+            print("how did we get here?")
+            continue
 
         # Set title
         axs[current_row, current_column].set_title(header)
 
         # Display progress
         progress_i += 1
-        progress = (progress_i / len(headers))
+        progress = progress_i / len(headers)
         progress_bar.progress(progress, text=f"Plot {header} completed.")
 
         print(f"Plot {header} completed.")
@@ -159,6 +162,6 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
         # Step column
         current_column += 1
 
-    progress_bar.progress(1, text=f"Plotting Complete")
+    progress_bar.progress(1, text="Plotting Complete")
 
     return fig
