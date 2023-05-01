@@ -1,6 +1,6 @@
 # Imports
 import matplotlib.pyplot as plt
-import kingstats
+from modules import kingstats
 import numpy as np
 import streamlit as st
 
@@ -80,8 +80,8 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
         n_rows = (n_graphs // n_columns) + 1
 
     plt.style.use("dark_background")
-    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 10, n_rows * 10))
-    # plt.subplots_adjust(wspace=0.5, hspace=0.5)
+    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 5, n_rows * 5))
+    plt.subplots_adjust(wspace=0.2, hspace=0.2)
 
     # Plot
     current_row = 0
@@ -121,7 +121,7 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
             fs = 1 / delta_data_x
 
             # define bounds for x
-            axs[current_row, current_column].set_xlim([0, 20])
+            axs[current_row, current_column].set_xlim(processor_arguments)
 
             processed_x_axis = np.fft.fftfreq(len(y_axis), 1 / fs)
             processed_y_axis = np.abs(np.log(np.fft.fft(y_axis)))
@@ -162,6 +162,6 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
         # Step column
         current_column += 1
 
-    progress_bar.progress(1, text="Plotting Complete")
+    progress_bar.empty()
 
     return fig
