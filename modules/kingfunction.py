@@ -138,16 +138,12 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
                 linewidth=0.5
             )
 
-        elif plot_type == "Scatter":
+        else:
             axs[current_row, current_column].scatter(
                 processed_x_axis,
                 processed_y_axis,
                 linewidth=0.5
             )
-
-        else:
-            print("how did we get here?")
-            continue
 
         # Set title
         axs[current_row, current_column].set_title(header)

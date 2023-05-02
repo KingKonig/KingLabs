@@ -6,6 +6,9 @@ from modules import kingfiles, kingfunction, kingdatagenerator
 
 if __name__ == "__main__":
     graph = False
+    plot_type = ""
+    post_processor = ""
+    processor_arguments = ""
 
     with st.sidebar:
         # Uploader
@@ -43,7 +46,7 @@ if __name__ == "__main__":
 
                 # Processor arguments
                 if post_processor == "Moving Average":
-                    processor_arguments = tuple((st.slider("N for moving average:", 1, 100, 1, 1),))
+                    processor_arguments = tuple((st.slider("N for moving average:", 2, 100, 1, 1),))
 
                 elif post_processor == "Lowpass":
                     freq_cutoff = st.slider("Frequency cutoff (hz):", 1, 100, 1, 1)
