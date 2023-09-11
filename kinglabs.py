@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
                 # Processor arguments
                 if post_processor == "Moving Average":
-                    processor_arguments = tuple((st.slider("N for moving average:", 2, 100, 1, 1),))
+                    processor_arguments = tuple((st.slider("N for moving average:", 2, 100, 2, 1),))
 
                 elif post_processor == "Lowpass":
                     freq_cutoff = st.slider("Frequency cutoff (hz):", 1, 100, 1, 1)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
                     processor_arguments = st.slider("Frequency Range:", 0, 100, (1, 20), 1)
 
                 # Quality slider
-                dpi = st.slider("Plot DPI:", 10, 600, 300, 10)
+                dpi = st.slider("Plot DPI:", 10, 600, 100, 10)
 
             else:
                 st.write("Please upload a file first.")
@@ -107,4 +107,5 @@ if __name__ == "__main__":
 
     # Plot the data when an update occurs
     with st.spinner("Matplotlib is thinking really hard..."):
-        st.pyplot(kingfunction.auto_plot(data, plot_type, post_processor, processor_arguments), dpi=dpi)
+        if uploaded_files:
+            st.pyplot(kingfunction.auto_plot(data, plot_type, post_processor, processor_arguments), dpi=dpi)
