@@ -73,7 +73,7 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
     # Setup plot figure
     if n_graphs <= 2:
         n_columns = n_graphs
-        n_rows = 1
+        n_rows = 2
 
     else:
         n_columns = 3
