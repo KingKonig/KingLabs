@@ -57,35 +57,13 @@ def na_dropper(df, threshold=None, export=False):
 #     return y
 
 
-def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tuple):
+def plot(df, plot_type="line", post_processor=str, processor_arguments=tuple):
     # Get headers of dataset
     headers = df.columns.values.tolist()
 
-    # Iterate to find how many graphs are needed
-    n_graphs = 0
-    skip_list = ["index", "frame_no", "timestamp", "x", "time", "level_0", "Time (s)"]
-
-    for header in headers:
-        if header in skip_list:
-            continue
-        n_graphs += 1
-
-    # Setup plot figure
-    if n_graphs <= 2:
-        n_columns = n_graphs
-        n_rows = 2
-
-    else:
-        n_columns = 3
-        if n_graphs % n_columns == 0:
-            n_rows = n_graphs // n_columns
-        elif n_graphs < n_columns:
-            n_rows = 2
-        else:
-            n_rows = (n_graphs // n_columns) + 1
 
     plt.style.use("dark_background")
-    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 8, n_rows * 8))
+    fig, axs = plt.subplots(1, 1, figsize=(8, 8))
     plt.subplots_adjust(wspace=0.15, hspace=0.15)
 
     # Plot
