@@ -1,7 +1,7 @@
 # Imports
 import numpy as np
 import pandas as pd
-from scipy.signal import butter,filtfilt
+from scipy.signal import butter, filtfilt
 
 
 # Functions

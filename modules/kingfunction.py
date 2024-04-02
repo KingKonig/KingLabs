@@ -1,6 +1,6 @@
 # Imports
 import matplotlib.pyplot as plt
-import kingstats
+from modules import kingstats
 import numpy as np
 import streamlit as st
 
@@ -63,7 +63,7 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
 
     # Iterate to find how many graphs are needed
     n_graphs = 0
-    skip_list = ["index", "frame_no", "timestamp", "x", "time", "level_0"]
+    skip_list = ["index", "frame_no", "timestamp", "x", "time", "level_0", "Time (s)"]
 
     for header in headers:
         if header in skip_list:
@@ -71,17 +71,22 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
         n_graphs += 1
 
     # Setup plot figure
-    n_columns = 3
-    if n_graphs % n_columns == 0:
-        n_rows = n_graphs // n_columns
-    elif n_graphs < n_columns:
+    if n_graphs <= 2:
+        n_columns = n_graphs
         n_rows = 2
+
     else:
-        n_rows = (n_graphs // n_columns) + 1
+        n_columns = 3
+        if n_graphs % n_columns == 0:
+            n_rows = n_graphs // n_columns
+        elif n_graphs < n_columns:
+            n_rows = 2
+        else:
+            n_rows = (n_graphs // n_columns) + 1
 
     plt.style.use("dark_background")
-    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 10, n_rows * 10))
-    # plt.subplots_adjust(wspace=0.5, hspace=0.5)
+    fig, axs = plt.subplots(n_rows, n_columns, figsize=(n_columns * 8, n_rows * 8))
+    plt.subplots_adjust(wspace=0.15, hspace=0.15)
 
     # Plot
     current_row = 0
@@ -121,7 +126,7 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
             fs = 1 / delta_data_x
 
             # define bounds for x
-            axs[current_row, current_column].set_xlim([0, 20])
+            axs[current_row, current_column].set_xlim(processor_arguments)
 
             processed_x_axis = np.fft.fftfreq(len(y_axis), 1 / fs)
             processed_y_axis = np.abs(np.log(np.fft.fft(y_axis)))
@@ -131,26 +136,41 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
             processed_y_axis = y_axis
 
         # Plot the data
-        if plot_type == "Line":
-            axs[current_row, current_column].plot(
-                processed_x_axis,
-                processed_y_axis,
-                linewidth=0.5
-            )
+        if n_graphs <= 2:
+            if plot_type == "Line":
+                axs.plot(
+                    processed_x_axis,
+                    processed_y_axis,
+                    linewidth=0.5
+                )
 
-        elif plot_type == "Scatter":
-            axs[current_row, current_column].scatter(
-                processed_x_axis,
-                processed_y_axis,
-                linewidth=0.5
-            )
+            else:
+                axs.scatter(
+                    processed_x_axis,
+                    processed_y_axis,
+                    linewidth=0.5
+                )
+
+                # Set title
+                axs.set_title(header)
 
         else:
-            print("how did we get here?")
-            continue
+            if plot_type == "Line":
+                axs[current_row, current_column].plot(
+                    processed_x_axis,
+                    processed_y_axis,
+                    linewidth=0.5
+                )
 
-        # Set title
-        axs[current_row, current_column].set_title(header)
+            else:
+                axs[current_row, current_column].scatter(
+                    processed_x_axis,
+                    processed_y_axis,
+                    linewidth=0.5
+                )
+
+                # Set title
+                axs[current_row, current_column].set_title(header)
 
         # Display progress
         progress_i += 1
@@ -162,6 +182,6 @@ def auto_plot(df, plot_type="line", post_processor=str, processor_arguments=tupl
         # Step column
         current_column += 1
 
-    progress_bar.progress(1, text="Plotting Complete")
+    progress_bar.empty()
 
     return fig

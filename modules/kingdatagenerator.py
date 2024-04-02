@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 def express_gen(expression, lower_lim, upper_lim, n, scatter, y_label):
